@@ -28,7 +28,8 @@ import {
 	testUnlockPin,
 	testVisible,
 	testSetUpDefaultPath,
-	pinCode
+	pinCode,
+	waitAlert
 } from 'e2e/utils';
 import {
 	ETHEREUM_NETWORK_LIST,
@@ -36,6 +37,7 @@ import {
 } from 'constants/networkSpecs';
 
 const {
+	Alert,
 	Main,
 	IdentitiesSwitch,
 	IdentityManagement,
@@ -60,7 +62,7 @@ describe('Load test', () => {
 		await testTap(IdentityNew.createButton);
 		await testVisible(IdentityBackup.seedText);
 		await testTap(IdentityBackup.nextButton);
-		await element(by.text('Proceed')).tap();
+		await testTap(Alert.backupDoneButton);
 		await testSetUpDefaultPath();
 	});
 
@@ -68,7 +70,7 @@ describe('Load test', () => {
 		await testTap(PathsList.deriveButton);
 		await testInput(PathDerivation.pathInput, defaultPath);
 		await testInput(PathDerivation.nameInput, 'default');
-		await element(by.text('Done')).tap();
+		await waitAlert();
 		await testExist(PathsList.pathCard + `//kusama${defaultPath}`);
 	});
 
@@ -77,19 +79,26 @@ describe('Load test', () => {
 		await testTap(PathDetail.deriveButton);
 		await testInput(PathDerivation.pathInput, childPath);
 		await testInput(PathDerivation.nameInput, 'child');
-		await element(by.text('Done')).tap();
+		await waitAlert();
 		await testExist(PathsList.pathCard + `//kusama${defaultPath}${childPath}`);
+	});
+
+	it('derive new account with quick derivation button', async () => {
+		await tapBack();
+		const deriveButtonId = `${PathsList.pathsGroup}${defaultPath}`;
+		await testExist(deriveButtonId);
+		await testTap(deriveButtonId);
+		await testExist(PathsList.pathCard + `//kusama${defaultPath}//0`);
 	});
 
 	it('need pin after application go to the background', async () => {
 		await device.sendToHome();
 		await device.launchApp({ newInstance: false });
-		await tapBack();
 		await testTap(PathsList.deriveButton);
 		await testUnlockPin(pinCode);
 		await testInput(PathDerivation.pathInput, secondPath);
 		await testInput(PathDerivation.nameInput, 'second');
-		await element(by.text('Done')).tap();
+		await waitAlert();
 		await testExist(PathsList.pathCard + `//kusama${secondPath}`);
 	});
 
@@ -99,7 +108,7 @@ describe('Load test', () => {
 		await testTap(Main.addCustomNetworkButton);
 		await testInput(PathDerivation.pathInput, customPath);
 		await testInput(PathDerivation.nameInput, 'custom');
-		await element(by.text('Done')).tap();
+		await waitAlert();
 		await testVisible(Main.chooserScreen);
 	});
 
@@ -109,7 +118,7 @@ describe('Load test', () => {
 		await testTap(PathsList.pathCard + `//kusama${defaultPath}`);
 		await testTap(PathDetail.popupMenuButton);
 		await testTap(PathDetail.deleteButton);
-		await element(by.text('Delete')).tap();
+		await testTap(Alert.deleteAccount);
 		await testNotExist(PathsList.pathCard + `//kusama${defaultPath}`);
 	});
 
@@ -132,7 +141,7 @@ describe('Load test', () => {
 		await testVisible(PathDetail.screen);
 		await testTap(PathDetail.popupMenuButton);
 		await testTap(PathDetail.deleteButton);
-		await element(by.text('Delete')).tap();
+		await testTap(Alert.deleteAccount);
 		await testNotExist(Main.networkButton + ethereumButtonIndex);
 	});
 
@@ -141,7 +150,7 @@ describe('Load test', () => {
 		await testTap(IdentitiesSwitch.manageIdentityButton);
 		await testTap(IdentityManagement.popupMenuButton);
 		await testTap(IdentityManagement.deleteButton);
-		await element(by.text('Delete')).tap();
+		await testTap(Alert.deleteIdentity);
 		await testUnlockPin(pinCode);
 		await testVisible(Main.noAccountScreen);
 	});

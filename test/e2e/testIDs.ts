@@ -18,6 +18,12 @@ const testIDs = {
 	AccountListScreen: {
 		accountList: 'accountList'
 	},
+	Alert: {
+		backupDoneButton: 'alert_identity_backup_done',
+		deleteAccount: 'alert_delete_account',
+		deleteConfirmation: 'alert_delete_confirmation',
+		deleteIdentity: 'alert_delete_identity'
+	},
 	Header: {
 		headerBackButton: 'header_back_button'
 	},
@@ -83,6 +89,7 @@ const testIDs = {
 	PathsList: {
 		deriveButton: 'path_list_derive_button',
 		pathCard: 'path_list_path_card',
+		pathsGroup: 'path_list_paths_group',
 		scanButton: 'path_list_scan_button',
 		screen: 'path_list_screen'
 	},
