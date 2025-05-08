@@ -654,7 +654,7 @@ pub fn generate_bulk_transaction_qr<P: AsRef<Path>>(
 ) -> Result<()> {
     let encoded_transactions = (0..tx_count).map(|_| {
 
-let line = "0102".to_string() + 
+let line = "0102".to_string() +
     &from +
 "a80403004adb5312dbd3a1bc28610deb1fb631110bbcccb6e7fb97e18501509d5565ea760b00a014e3322615010000682400000e000000e143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e2faa9938ec10c2627d0fd5d20214aba3bf281e94a6a8f50d19b4e0ce3b253d65e143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e";
         hex::decode(line).unwrap()

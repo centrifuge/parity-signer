@@ -18,3 +18,9 @@ members = [
 	"transaction_parsing",
 	"transaction_signing"
 ]
+
+[workspace.dependencies]
+schnorrkel = "=0.9.1"
+
+[patch.crates-io]
+substrate-bip39 = { git = "https://github.com/paritytech/substrate-bip39", rev = "ab40b643e065daba52066ada741ffff240d70cdd" } # Uses schnorrkel 0.9.1
